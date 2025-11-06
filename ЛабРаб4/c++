@@ -1,0 +1,71 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <cctype>
+
+/**
+ * Функция нормализации строки: нижний регистр, удаление пробелов.
+ * @param s исходная строка
+ * @return нормализованная строка
+ */
+std::string normalize(const std::string& s) {
+    std::string cleaned;
+    // Проходим по всем символам исходной строки
+    for (char c : s) {
+        // Если символ не пробел — добавляем в результат
+        if (c != ' ') {
+            // Преобразуем в нижний регистр и добавляем
+            cleaned += std::tolower(c);
+        }
+    }
+    return cleaned;
+}
+
+/**
+ * Рекурсивная проверка подстроки на палиндром.
+ * @param s строка для проверки
+ * @param left левый индекс
+ * @param right правый индекс
+ * @return true, если подстрока — палиндром
+ */
+bool isPalindromeRecursive(const std::string& s, int left, int right) {
+    // Базовый случай 1: границы встретились — палиндром
+    if (left >= right) {
+        return true;
+    }
+    // Базовый случай 2: символы не совпадают — не палиндром
+    if (s[left] != s[right]) {
+        return false;
+    }
+    // Рекурсивный вызов: сдвигаем границы
+    return isPalindromeRecursive(s, left + 1, right - 1);
+}
+
+/**
+ * Основная функция проверки палиндрома.
+ * @param s входная строка
+ * @return true, если строка — палиндром
+ */
+bool isPalindrome(const std::string& s) {
+    // Нормализуем строку
+    std::string cleaned = normalize(s);
+    // Запускаем рекурсивную проверку
+    return isPalindromeRecursive(cleaned, 0, cleaned.length() - 1);
+}
+
+// Пример использования
+int main() {
+    std::string testStrings[] = {
+        "шалаш",
+        "А роза упала на лапу Азора",
+        "привет",
+        "abcba",
+        "a"
+    };
+
+    for (const std::string& text : testStrings) {
+        bool result = isPalindrome(text);
+        std::cout << "'" << text << "' -> " << (result ? "true" : "false") << std::endl;
+    }
+    return 0;
+}
